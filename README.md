@@ -7,8 +7,8 @@ This README will show you how to run the application locally or running it in th
 ### Install the code in your home ###
 
  * cd ~/
- * git clone git@bitbucket.org:csponchiado/rocket.git
- * cd rocket
+ * git clone https://github.com/Sponch/go-solr-indexer-searcher.git
+ * cd go-solr-indexer-searcher
 
 ### Installing the configuration of Solr ###
 
@@ -16,7 +16,7 @@ This README will show you how to run the application locally or running it in th
 2. Run this command: `mvn install`. 
 3. It'll create the following structure:
        - `/opt/solr/data[1-4]`              // indexes of the solr simulating each nodes in the cloud
-       - `/opt/solr/rocket[1-4]`            // configuration of the solr for each node
+       - `/opt/solr/core[1-4]`            // configuration of the solr for each node
 
 ### Running Zookeeper ###
 
@@ -29,28 +29,28 @@ This README will show you how to run the application locally or running it in th
 1. Install Solr 4.10.2
 2. Enter in the diretory of Solr: `cd solr-4.10.2/example`  
 3. Run these commands, each one in one terminal :
-	-  `java -DzkHost=localhost:2181 -DnumShards=4 -Dbootstrap_confdir=/opt/solr/rocket1/wikipedia/conf -Dcollection.configName=rocket  -jar -Dsolr.solr.home=/opt/solr/rocket1 -Djetty.port=8080   start.jar`
-	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/rocket2 -Djetty.port=8081  start.jar`
-	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/rocket3 -Djetty.port=8082  start.jar`
-	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/rocket4 -Djetty.port=8083  start.jar`
+	-  `java -DzkHost=localhost:2181 -DnumShards=4 -Dbootstrap_confdir=/opt/solr/core1/wikipedia/conf -Dcollection.configName=core  -jar -Dsolr.solr.home=/opt/solr/core1 -Djetty.port=8080   start.jar`
+	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/core2 -Djetty.port=8081  start.jar`
+	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/core3 -Djetty.port=8082  start.jar`
+	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/core4 -Djetty.port=8083  start.jar`
 4. You can check that your solr is running in cloud using this URL: 
 	-  `http://localhost:8080/solr/#/~cloud`
 5. If you restart your solr, for the port 8080 use this command because the zookeeper has been already configurated
-	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/rocket1 -Djetty.port=8080  start.jar`
+	-  `java -DzkHost=localhost:2181 -jar -Dsolr.solr.home=/opt/solr/core1 -Djetty.port=8080  start.jar`
 
 ### Running the script of indexing ###
 
 1. Unzip the XML of Wikipedia (http://download.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2) in this directory: 
-	- `~/rocket`
+	- `~/core`
 2. Set the Go Path: 
-	- `export GOPATH=~/rocket/wikipedia-search/`
+	- `export GOPATH=~/core/wikipedia-search/`
 3. Run this command to run the indexer: 
 	- `./wikipedia-search/bin/indexer -infile=enwiki-latest-pages-articles.xml -solrPort=8080 -solrHost=127.0.0.1 -skip=0`
 
 ### Running the script of searching ###
 
 1. Set the Go Path: 
-	- `export GOPATH=~/rocket/wikipedia-search/`
+	- `export GOPATH=~/core/wikipedia-search/`
 2. Run this command:
 	- `./wikipedia-search/bin/searcher -solrHost=127.0.0.1 -solrPort=8080   -qf "Title^300 ContributorName^50 ContributorIP^10 Text Title_ngram^50 ContributorName_ngram^3 ContributorIP_ngram^3 Text_ngram" -query=<query>`
 		- query: prefix string from ContributorName or Text from wikipedia
