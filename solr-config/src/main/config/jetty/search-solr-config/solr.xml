@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<!-- JETTY_HOME="/opt/jetty-distribution-8.1.8.v20121106" JAVA_HOME="/usr/java/jdk1.7.0_45" JETTY_CONSOLE="/var/log/ws-search-solr-config" JETTY_USER="jetty" JAVA_OPTIONS="-server -Xms512m -Xmx512m -Dfile.encoding=UTF-8 -Dorg.mortbay.xml.XmlParser.NotValidating=true 
+	-Dsun.net.inetaddr.ttl=60 -Dhttps.proxyHost=proxy.dev.vmcommerce.intra -Dhttps.proxyPort=3128 -Dhttp.proxyHost=proxy.dev.vmcommerce.intra -Dhttp.proxyPort=3128 -Dhttp.nonProxyHosts='*.intra|localhost'" -->
+
+<Configure class="org.eclipse.jetty.server.Server" id="Server">
+	<Set name="ThreadPool">
+		<New class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+			<Set name="minThreads">300</Set>
+			<Set name="maxThreads">300</Set>
+			<Set name="detailedDump">false</Set>
+		</New>
+	</Set>
+
+	<Call name="addConnector">
+		<Arg>
+			<New class="org.eclipse.jetty.server.nio.SelectChannelConnector">
+				<Set name="port">
+					<SystemProperty name="jetty.port" default="8984" />
+				</Set>
+				<Set name="maxIdleTime">300000</Set>
+				<Set name="Acceptors">2</Set>
+				<Set name="statsOn">false</Set>
+				<Set name="confidentialPort">8443</Set>
+				<Set name="lowResourcesConnections">20000</Set>
+				<Set name="lowResourcesMaxIdleTime">5000</Set>
+				<Set name="forwarded">true</Set>
+			</New>
+		</Arg>
+	</Call>
+
+	<!-- Setting system properties -->
+    <Call class="java.lang.System" name="setProperty">
+            <Arg>logback.configurationFile</Arg>
+            <Arg>/opt/webapps/solr/logback.xml</Arg>
+    </Call>
+
+	<Call class="java.lang.System" name="setProperty">
+		<!-- Path das configuracoes -->
+		<Arg>search.config.path</Arg>
+		<Arg>/opt/webapps/solr4</Arg>
+	</Call>
+
+	<Set name="handler">
+		<New class="org.eclipse.jetty.webapp.WebAppContext">
+			<Set name="contextPath">/</Set>
+			<Set name="war">/opt/webapps/solr4/solr4.war</Set>
+		</New>
+	</Set>
+
+</Configure>
