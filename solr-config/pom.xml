@@ -60,7 +60,7 @@
 	</repositories>
 
 	<properties>
-		<solr.version>4.10.2</solr.version>
+		<solr.version>4.10.3</solr.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rpm.filemode>755</rpm.filemode>
 		<rpm.user>jetty</rpm.user>
